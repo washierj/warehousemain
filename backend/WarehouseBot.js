@@ -51,7 +51,7 @@ class WarehouseBot {
       userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36',
       viewPort: { width: 1920, height: 1080 },
       proxyServer: null, // e.g. 'http://username:password@proxy.example.com:8080'
-      refreshDelay: 3500,
+      refreshDelay: 1000,
       typingDelay: { min: 10, max: 25 },
       mouseMovementEnabled: true
     };
@@ -231,19 +231,19 @@ await this.page.setExtraHTTPHeaders({
               await this.page.setCookie(...bypassData.cookies);
             
               // Short delay
-              await new Promise(resolve => setTimeout(resolve, 500));
+              await new Promise(resolve => setTimeout(resolve, 250));
             
               // Now visit the actual product URL
-              await this.page.goto(productUrl, { waitUntil: 'domcontentloaded', timeout: 15000 });
+              await this.page.goto(productUrl, { waitUntil: 'domcontentloaded', timeout: 10000 });
             } else {
               // If bypass failed, fallback to direct navigation
-              await this.page.goto(productUrl, { waitUntil: 'domcontentloaded', timeout: 15000 });
+              await this.page.goto(productUrl, { waitUntil: 'domcontentloaded', timeout: 10000 });
             }
             
-            await new Promise(resolve => setTimeout(resolve, 500));
+            await new Promise(resolve => setTimeout(resolve, 300));
 
             try {
-              await this.page.waitForSelector('#cf-spinner-please-wait', { timeout: 2500 });
+              await this.page.waitForSelector('#cf-spinner-please-wait', { timeout: 1000 });
               console.log('⏳ Cloudflare challenge detected, waiting...');
               await this.page.waitForTimeout(8000);  // Or longer if needed
             } catch (e) {
@@ -251,7 +251,7 @@ await this.page.setExtraHTTPHeaders({
             }
             
   
-            await this.page.waitForSelector('button.btn.btn-container.btn-block', { timeout: 2000 });
+            await this.page.waitForSelector('button.btn.btn-container.btn-block', { timeout: 1000 });
             const addToCartButton = await this.page.$('button.btn.btn-container.btn-block');
   
             if (addToCartButton) {
@@ -265,7 +265,7 @@ await this.page.setExtraHTTPHeaders({
             }
           } catch (err) {
             console.error(`🛑 Page navigation failed (${productUrl}):`, err.message);
-            await new Promise(resolve => setTimeout(resolve, 300));
+            await new Promise(resolve => setTimeout(resolve, 500));
           }
         } else {
           console.error('Page is closed or not available');
@@ -305,7 +305,7 @@ await this.page.setExtraHTTPHeaders({
       const addButton = await this.page.$('button.btn.btn-container.btn-block');
       if (addButton) {
         await addButton.click();
-        await new Promise(resolve => setTimeout(resolve, 500));
+        await new Promise(resolve => setTimeout(resolve, 1000));
       } else {
         throw new Error("Add to Cart button not found.");
       }
@@ -386,7 +386,7 @@ await this.page.waitForTimeout(500);
       
       // Click "Deliver to this address"
 // ✅ Wait a bit to ensure address selection updates form state
-await this.page.waitForTimeout(2000);
+await this.page.waitForTimeout(1000);
 
 // ✅ Scroll to the button to ensure it's in view
 await this.page.evaluate(() => {

@@ -11,8 +11,8 @@ start cmd /k "node index.js"
 timeout /t 3
 
 echo Starting frontend (React dev server)...
-cd "C:\Users\Ryan Jones\Desktop\warehouse bot 2\frontend"
-start cmd /k "npm start"
+start cmd /k "cd /d C:\Users\Ryan Jones\Desktop\warehouse bot 2\frontend && npx serve -s build -l 3002"
+
 
 echo All systems go.
 pause
